@@ -1,0 +1,20 @@
+{
+  "name": "spotify-app",
+  "version": "1.0.0",
+  "description": "### Features <ul> <li>Postgres Database</li>  <li>NodeJS API Server</li>  <li>React Front End</li> </ul>",
+  "main": "index.js",
+  "scripts": {
+    "start:postgres": "cd postgres && docker-compose up",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larrysharpe/spotify-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/larrysharpe/spotify-app/issues"
+  },
+  "homepage": "https://github.com/larrysharpe/spotify-app#readme"
+}
