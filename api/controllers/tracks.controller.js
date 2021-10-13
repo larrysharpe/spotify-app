@@ -1,6 +1,8 @@
 const db = require("../models");
+const Sequelize = require('sequelize');
 const SpotifyService = require("../services/spotify.service");
 const Tracks = db.tracks;
+const Op = Sequelize.Op;
 
 const SpotifyConfig = require('../config/spofity.config');
 if (!SpotifyConfig.accessToken) {
@@ -8,7 +10,7 @@ if (!SpotifyConfig.accessToken) {
     SpotifyService.getAuthToken();
 }
 
-// Create and Save a new Tutorial
+// Create and Save a new track
 exports.create = async (req, res) => {
     const { ISRC } = req.query;
     // Validate request
@@ -45,8 +47,21 @@ exports.create = async (req, res) => {
 
 // Retrieve all Tracks from the database.
 exports.findAll = (req, res) => {
-    Tracks.findAll()
+    const { artist } = req.query;
+    let conditions;
+    if ( artist ) {
+        conditions = {
+            where: {
+                artists: {
+                    [Op.like]: `%${artist}%`
+                }
+            }
+        }
+    }
+
+    Tracks.findAll(conditions)
         .then(data => {
+            data.forEach( track => track.artists = [track.artists] )
             res.send(data);
         })
         .catch(err => {
@@ -57,17 +72,18 @@ exports.findAll = (req, res) => {
         });
 };
 
-// Find a single Tutorial with an id
+// Find a single track with an isrc
 exports.findOne = (req, res) => {
     const { ISRC } = req.params;
 
-    Tracks.findByPk(ISRC)
+    Tracks.findByPk(ISRC.trim())
         .then(data => {
-            if (data) {
-                res.send(data);
+            if (data.dataValues) {
+                data.dataValues.artists = [data.dataValues.artists]
+                res.send(data.dataValues);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Tutorial with id=${id}.`
+                    message: `Cannot find track with ISRC=${ISRC}.`
                 });
             }
         })
@@ -78,7 +94,7 @@ exports.findOne = (req, res) => {
         });
 };
 
-// Delete a Tutorial with the specified id in the request
+// Delete a track with the specified ISRC in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 

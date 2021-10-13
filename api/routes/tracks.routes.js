@@ -3,7 +3,7 @@ module.exports = app => {
 
     var router = require("express").Router();
 
-    // Create a new Tutorial
+    // Create a new track
     router.post("/", tracks.create);
 
     // List tracks
@@ -12,10 +12,10 @@ module.exports = app => {
     // Delete all tracks
     router.delete("/", tracks.deleteAll);
 
-    // Retrieve a single Tutorial with id
+    // Retrieve a single track with ISRC
     router.get("/:ISRC", tracks.findOne);
 
-    // Delete a Tutorial with id
+    // Delete a track with id
     router.delete("/:id", tracks.delete);
 
     app.use('/api/tracks', router);

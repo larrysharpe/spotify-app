@@ -4,16 +4,12 @@ const cors = require("cors");
 const db = require("./models");
 
 const app = express();
-
+app.use(cors());
 require("./routes/tracks.routes")(app);
+require("./routes/search.routes")(app);
 
 db.sequelize.sync();
 
-var corsOptions = {
-    origin: "http://localhost:8081"
-};
-
-app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
 app.use(express.json());

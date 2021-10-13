@@ -42,7 +42,25 @@ const getTrackByISRC = (ISRC) => {
         })
 }
 
+const searchTracksByTitle = (title) => {
+    let options = {
+        url: `https://api.spotify.com/v1/search?q=${title}&type=track`,
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${SpotifyConfig.accessToken}`
+        }
+    }
+    return axios(options)
+        .then((resp) => {
+           return resp.data;
+        })
+        .catch((err) => {
+            console.log('ERR GETTING SPOTIFY ACCESS TOKEN', err);
+        })
+}
+
 module.exports = {
     getAuthToken,
-    getTrackByISRC
+    getTrackByISRC,
+    searchTracksByTitle
 }
